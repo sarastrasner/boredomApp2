@@ -12,7 +12,6 @@ export default function HomeScreen(props) {
     const userID = props.extraData.id
 
     useEffect(() => {
-        console.log('am I getting my console meows?');
         entityRef
             .where("authorID", "==", userID)
             .orderBy('createdAt', 'desc')
@@ -52,16 +51,15 @@ export default function HomeScreen(props) {
         }
     }
 
-    const renderEntity = ({item, index}) => {
+    const renderEntity = ({item}) => {
         return (
             <View style={styles.entityContainer}>
                 <Text style={styles.entityText}>
-                    {index}. {item.text}
+                    {item.text}
                 </Text>
             </View>
         )
     }
-
     return (
         <View style={styles.container}>
             <View style={styles.formContainer}>
