@@ -4,7 +4,6 @@ import styles from './styles';
 import { firebase } from '../../firebase/config'
 
 export default function HomeScreen(props) {
-  console.log('Am I getting any console logs?')
 
     const [entityText, setEntityText] = useState('')
     const [entities, setEntities] = useState([])
@@ -13,6 +12,7 @@ export default function HomeScreen(props) {
     const userID = props.extraData.id
 
     useEffect(() => {
+        console.log('am I getting my console meows?');
         entityRef
             .where("authorID", "==", userID)
             .orderBy('createdAt', 'desc')
@@ -53,7 +53,6 @@ export default function HomeScreen(props) {
     }
 
     const renderEntity = ({item, index}) => {
-      console.log(item,index);
         return (
             <View style={styles.entityContainer}>
                 <Text style={styles.entityText}>
