@@ -35,6 +35,14 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  footerButton: {
+    height: 47,
+    borderRadius: 5,
+    backgroundColor: '#788eec',
+    width: 170,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonText: {
     color: 'white',
     fontSize: 16,
@@ -56,11 +64,12 @@ export default StyleSheet.create({
   footerView: {
     flex: 1,
     alignItems: "center",
-    marginTop: 20
-},
-  footerLink: {
-    color: '#788eec',
-    fontWeight: 'bold',
-    fontSize: 16
-  },
+    marginTop: 20,
+    marginBottom:50,
+    position: 'absolute',
+    left:0,
+    right:0,
+    bottom:0
+
+}
 });
