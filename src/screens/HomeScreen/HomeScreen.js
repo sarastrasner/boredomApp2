@@ -9,17 +9,26 @@ import {
 } from 'react-native';
 import styles from './styles';
 import { firebase } from '../../firebase/config';
+import RNShake from 'react-native-shake';
 
 export default function HomeScreen(props) {
   const [entityText, setEntityText] = useState('');
+  const [weight, setWeight] = useState('');
   const [entities, setEntities] = useState([]);
+  const [weightedItems, setWeightedItems] = useState([]);
+
+  useEffect(() => {
+    console.log('Meow! The component has mounted!');
+    RNShake.addEventListener('ShakeEvent', () => {
+      console.log('You shook the phone!');
+    });
+    return () => {
+      console.log('Boop! The component has unmounted');
+    };
+  }, []);
 
   const entityRef = firebase.firestore().collection('entities');
   const userID = props.extraData.id;
-
-  const signOut = () => {
-    console.log('You want to sign out!');
-  };
 
   useEffect(() => {
     entityRef
@@ -34,12 +43,26 @@ export default function HomeScreen(props) {
             newEntities.push(entity);
           });
           setEntities(newEntities);
+          generateWeightedItemsList(newEntities);
         },
         error => {
           console.log(error);
         }
       );
   }, []);
+
+  const generateWeightedItemsList = items => {
+    setWeightedItems();
+    items.forEach(item => {
+      if (item.weight) {
+        item = { ...item, newWeight: item.weight };
+        while (item.newWeight > 0) {
+          weightedItems.push(item);
+          item.newWeight--;
+        }
+      }
+    });
+  };
 
   const onAddButtonPress = () => {
     if (entityText && entityText.length > 0) {
@@ -48,6 +71,7 @@ export default function HomeScreen(props) {
         text: entityText,
         authorID: userID,
         createdAt: timestamp,
+        weight: weight,
       };
       entityRef
         .add(data)
@@ -59,6 +83,12 @@ export default function HomeScreen(props) {
           alert(error);
         });
     }
+  };
+
+  const onRandomTaskButtonPress = () => {
+    let randomIndex = parseInt(Math.random() * (weightedItems.length - 1));
+    console.log(weightedItems[randomIndex].text);
+    alert(weightedItems[randomIndex].text);
   };
 
   const renderEntity = ({ item }) => {
@@ -74,10 +104,22 @@ export default function HomeScreen(props) {
         <View style={styles.formContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Add new entity"
+            placeholder="Add new item"
+            required
             placeholderTextColor="#aaaaaa"
             onChangeText={text => setEntityText(text)}
             value={entityText}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            required
+            placeholder="Add a weight"
+            keyboardType="number-pad"
+            placeholderTextColor="#aaaaaa"
+            onChangeText={text => setWeight(text)}
+            value={weight}
             underlineColorAndroid="transparent"
             autoCapitalize="none"
           />
@@ -97,9 +139,12 @@ export default function HomeScreen(props) {
         )}
       </View>
       <View style={styles.footerView}>
-        <Text onPress={signOut} style={styles.footerLink}>
-          Manage Your Account
-        </Text>
+        <TouchableOpacity
+          style={styles.footerButton}
+          onPress={onRandomTaskButtonPress}
+        >
+          <Text style={styles.buttonText}>Get Random Task</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
