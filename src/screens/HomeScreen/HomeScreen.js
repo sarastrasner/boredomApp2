@@ -32,6 +32,7 @@ export default function HomeScreen(props) {
   const userID = props.extraData.id;
 
   useEffect(() => {
+    generateWeightedItemsList(entities);
     entityRef
       .where('authorID', '==', userID)
       .orderBy('createdAt', 'desc')
@@ -51,27 +52,20 @@ export default function HomeScreen(props) {
       );
   }, []);
 
-  const resetWeightedItemsState = () => setWeightedItems([]);
-
   const generateWeightedItemsList = items => {
-    resetWeightedItemsState();
-    console.log("Has the array been reset?", weightedItems);
-    console.log('------------');
+    let tempArray = []
     items.forEach(item => {
       item = { ...item, newWeight: item.weight };
-      //console.log(item);
       while (item.newWeight > 0) {
-        setWeightedItems([...weightedItems, item]);
+        tempArray.push(item);
         item.newWeight--;
-        // console.log(item.text);
       }
     });
-    // weightedItems.forEach(thing => {
-    //   let count = 0;
-    //     console.log(count++, thing.text);
-    //   })
-    console.log('~~~~~~~~~~~~~~~~~~~~');
-    console.log("Here's the NEW stuff", weightedItems);
+    setWeightedItems(tempArray);
+    console.log('Here\'s the weighted items');
+    weightedItems.forEach(thing => {
+      console.log(thing.text, thing.weight);
+    })
   };
 
   const onAddButtonPress = () => {
@@ -96,7 +90,6 @@ export default function HomeScreen(props) {
   };
 
   const onRandomTaskButtonPress = () => {
-    generateWeightedItemsList(entities);
     let randomIndex = parseInt(Math.random() * (weightedItems.length - 1));
     alert(weightedItems[randomIndex].text);
   };
