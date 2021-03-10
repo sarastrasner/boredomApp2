@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Modal,
 } from 'react-native';
 import styles from './styles';
 import { firebase } from '../../firebase/config';
@@ -18,7 +19,7 @@ export default function HomeScreen(props) {
   const [weightedItems, setWeightedItems] = useState([]);
 
   useEffect(() => {
-    console.log('Meow! The component has mounted!');
+    console.log('Meow! The component has mounted');
     RNShake.addEventListener('ShakeEvent', () => {
       console.log('You shook the phone!');
     });
@@ -43,7 +44,6 @@ export default function HomeScreen(props) {
             newEntities.push(entity);
           });
           setEntities(newEntities);
-          generateWeightedItemsList(newEntities);
         },
         error => {
           console.log(error);
@@ -51,17 +51,27 @@ export default function HomeScreen(props) {
       );
   }, []);
 
+  const resetWeightedItemsState = () => setWeightedItems([]);
+
   const generateWeightedItemsList = items => {
-    setWeightedItems();
+    resetWeightedItemsState();
+    console.log("Has the array been reset?", weightedItems);
+    console.log('------------');
     items.forEach(item => {
-      if (item.weight) {
-        item = { ...item, newWeight: item.weight };
-        while (item.newWeight > 0) {
-          weightedItems.push(item);
-          item.newWeight--;
-        }
+      item = { ...item, newWeight: item.weight };
+      //console.log(item);
+      while (item.newWeight > 0) {
+        setWeightedItems([...weightedItems, item]);
+        item.newWeight--;
+        // console.log(item.text);
       }
     });
+    // weightedItems.forEach(thing => {
+    //   let count = 0;
+    //     console.log(count++, thing.text);
+    //   })
+    console.log('~~~~~~~~~~~~~~~~~~~~');
+    console.log("Here's the NEW stuff", weightedItems);
   };
 
   const onAddButtonPress = () => {
@@ -86,14 +96,14 @@ export default function HomeScreen(props) {
   };
 
   const onRandomTaskButtonPress = () => {
+    generateWeightedItemsList(entities);
     let randomIndex = parseInt(Math.random() * (weightedItems.length - 1));
-    console.log(weightedItems[randomIndex].text);
     alert(weightedItems[randomIndex].text);
   };
 
   const renderEntity = ({ item }) => {
     return (
-      <View style={styles.entityContainer}>
+      <View style={styles.modalContainer}>
         <Text style={styles.entityText}>{item.text}</Text>
       </View>
     );

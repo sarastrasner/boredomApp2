@@ -57,6 +57,12 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 16,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
   entityText: {
     fontSize: 20,
     color: '#333333',
