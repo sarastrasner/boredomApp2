@@ -1,0 +1,42 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "13:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: react-native-webview
+    versions:
+    - 11.2.5
+    - 11.3.1
+    - 11.3.2
+    - 11.4.0
+    - 11.4.2
+  - dependency-name: firebase
+    versions:
+    - 8.3.0
+    - 8.3.1
+    - 8.3.2
+    - 8.3.3
+    - 8.4.1
+  - dependency-name: "@babel/core"
+    versions:
+    - 7.13.10
+    - 7.13.13
+    - 7.13.14
+    - 7.13.15
+  - dependency-name: react-native-screens
+    versions:
+    - 2.18.1
+    - 3.0.0
+    - 3.1.0
+  - dependency-name: react-native-web
+    versions:
+    - 0.14.13
+    - 0.15.3
+  - dependency-name: react-native-reanimated
+    versions:
+    - 2.0.0
+    - 2.0.1
